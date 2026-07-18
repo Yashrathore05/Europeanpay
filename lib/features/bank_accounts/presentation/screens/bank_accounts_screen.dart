@@ -269,7 +269,7 @@ class _AccountCard extends StatelessWidget {
             Text(
               '€${balance.toStringAsFixed(2)}',
               style: AppTypography.titleSmall.copyWith(
-                fontWeight: FontWeight.w750,
+                fontWeight: FontWeight.w700,
                 fontFamily: 'monospace',
               ),
             ),

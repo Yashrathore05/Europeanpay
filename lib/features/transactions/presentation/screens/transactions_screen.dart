@@ -306,7 +306,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   '${isCredit ? '+' : ''}${txn.amount.toEur}',
                   style: AppTypography.bodyLarge.copyWith(
                     color: isCredit ? AppColors.success : AppColors.textPrimary,
-                    fontWeight: FontWeight.w750,
+                    fontWeight: FontWeight.w700,
                     fontFamily: 'monospace',
                   ),
                 ),

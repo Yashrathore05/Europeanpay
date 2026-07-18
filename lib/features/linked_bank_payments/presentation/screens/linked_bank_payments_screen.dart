@@ -177,7 +177,7 @@ class _StatCard extends StatelessWidget {
               value,
               style: AppTypography.headlineMedium.copyWith(
                 color: color,
-                fontWeight: FontWeight.w750,
+                fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(height: 2),
@@ -284,7 +284,7 @@ class _MatchCard extends StatelessWidget {
                         '€${match.bankTxnAmount.toStringAsFixed(2)}',
                         style: AppTypography.bodyLarge.copyWith(
                           color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w750,
+                          fontWeight: FontWeight.w700,
                           fontFamily: 'monospace',
                         ),
                       ),
@@ -330,7 +330,7 @@ class _MatchCard extends StatelessWidget {
                         '€${match.euPayTxnAmount.toStringAsFixed(2)}',
                         style: AppTypography.bodyLarge.copyWith(
                           color: AppColors.primary,
-                          fontWeight: FontWeight.w750,
+                          fontWeight: FontWeight.w700,
                           fontFamily: 'monospace',
                         ),
                       ),
