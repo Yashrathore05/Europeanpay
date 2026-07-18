@@ -1,0 +1,47 @@
+/// European Pay application constants.
+abstract final class AppConstants {
+  static const String appName = 'European Pay';
+  static const String appNameShort = 'EU Pay';
+  static const String appVersion = '1.0.0';
+  static const String appBuildNumber = '1';
+  static const String defaultLanguage = 'en';
+  static const List<String> supportedLanguages = ['en', 'fr'];
+  static const String defaultCurrency = 'EUR';
+  static const String currencySymbol = '€';
+  static const int pinLength = 4;
+  static const int otpLength = 6;
+  static const int maxPinAttempts = 5;
+  static const int pinLockoutMinutes = 15;
+  static const int otpResendSeconds = 60;
+  static const int otpExpiryMinutes = 10;
+  static const int transactionsPageSize = 20;
+  static const int recentTransactionsCount = 5;
+  static const int transactionPollingSeconds = 30;
+  static const double pointsToEurRate = 0.01;
+  static const int pointsHistoryPageSize = 20;
+  static const double minWithdrawalPoints = 500;
+  static const double minMerchantSpendForWithdrawal = 50;
+  static const int connectionTimeoutMs = 30000;
+  static const int receiveTimeoutMs = 30000;
+  static const String storageKeyAccessToken = 'access_token';
+  static const String storageKeyRefreshToken = 'refresh_token';
+  static const String storageKeyUser = 'user_data';
+  static const String storageKeyPin = 'transaction_pin';
+  static const String storageKeyBiometricEnabled = 'biometric_enabled';
+  static const String storageKeyLanguage = 'language';
+  static const String storageKeyTimezone = 'timezone';
+  static const String storageKeyOnboardingComplete = 'onboarding_complete';
+  static const String storageKeyRememberMe = 'remember_me';
+  static const String storageKeyTwoFactorEnabled = '2fa_enabled';
+  static const String defaultCity = 'Paris';
+  static const double defaultLatitude = 48.8566;
+  static const double defaultLongitude = 2.3522;
+  static const int animDurationFast = 200;
+  static const int animDurationNormal = 300;
+  static const int animDurationSlow = 500;
+  static const int splashDurationMs = 2500;
+  static const int minPasswordLength = 8;
+  static const int maxPasswordLength = 64;
+  static const int minNameLength = 2;
+  static const int maxNameLength = 50;
+}
