@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../shared/widgets/buttons/eu_buttons.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -226,7 +225,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
         crossAxisAlignment: alignment,
         children: [
           Container(
-            maxWidth: MediaQuery.of(context).size.width * 0.75,
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
             margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
             padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
