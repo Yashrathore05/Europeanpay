@@ -6,8 +6,8 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
-import '../domain/models/bank_account.dart';
-import '../application/bank_accounts_provider.dart';
+import '../../domain/models/bank_account.dart';
+import '../../application/bank_accounts_provider.dart';
 
 class BankAccountsScreen extends ConsumerStatefulWidget {
   const BankAccountsScreen({super.key});

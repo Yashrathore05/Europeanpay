@@ -5,8 +5,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
-import '../domain/models/loyalty_details.dart';
-import '../application/loyalty_provider.dart';
+import '../../domain/models/loyalty_details.dart';
+import '../../application/loyalty_provider.dart';
 
 class LoyaltyScreen extends ConsumerWidget {
   const LoyaltyScreen({super.key});

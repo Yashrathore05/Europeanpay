@@ -22,6 +22,7 @@ class EuTextField extends StatelessWidget {
     this.autofocus = false,
     this.textInputAction,
     this.focusNode,
+    this.maxLength,
   });
 
   final TextEditingController? controller;
@@ -39,6 +40,7 @@ class EuTextField extends StatelessWidget {
   final bool autofocus;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +70,7 @@ class EuTextField extends StatelessWidget {
           autofocus: autofocus,
           textInputAction: textInputAction,
           focusNode: focusNode,
+          maxLength: maxLength,
           style: AppTypography.bodyLarge.copyWith(
             color: AppColors.textPrimary,
           ),

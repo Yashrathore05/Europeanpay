@@ -1,5 +1,5 @@
-import '../domain/models/settings_model.dart';
-import '../domain/repositories/settings_repository.dart';
+import '../../domain/models/settings_model.dart';
+import '../../domain/repositories/settings_repository.dart';
 
 class MockSettingsRepository implements SettingsRepository {
   MockSettingsRepository();

@@ -1,4 +1,4 @@
-import '../../transactions/domain/models/transaction_model.dart';
+import '../../../transactions/domain/models/transaction_model.dart';
 
 class DashboardData {
   const DashboardData({

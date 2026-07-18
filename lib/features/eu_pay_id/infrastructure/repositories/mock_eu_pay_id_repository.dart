@@ -1,7 +1,6 @@
-import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_result.dart';
-import '../domain/models/recipient.dart';
-import '../domain/repositories/eu_pay_id_repository.dart';
+import '../../domain/models/recipient.dart';
+import '../../domain/repositories/eu_pay_id_repository.dart';
 
 class MockEuPayIdRepository implements EuPayIdRepository {
   MockEuPayIdRepository();

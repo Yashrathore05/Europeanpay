@@ -179,7 +179,7 @@ class _PinGateSheetState extends State<_PinGateSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.borderDark.withValues(alpha: 0.3),
+              color: AppColors.border.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -215,7 +215,7 @@ class _PinGateSheetState extends State<_PinGateSheet> {
                       ? AppColors.error.withValues(alpha: 0.2)
                       : isFilled
                           ? AppColors.primary
-                          : AppColors.borderDark.withValues(alpha: 0.3),
+                          : AppColors.border.withValues(alpha: 0.3),
                   border: _isError ? Border.all(color: AppColors.error, width: 2) : null,
                 ),
               );

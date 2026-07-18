@@ -5,8 +5,8 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 import '../../../../shared/widgets/inputs/eu_inputs.dart';
-import '../../bank_accounts/application/bank_accounts_provider.dart';
-import '../application/loyalty_provider.dart';
+import '../../../bank_accounts/application/bank_accounts_provider.dart';
+import '../../application/loyalty_provider.dart';
 
 class WithdrawalScreen extends ConsumerStatefulWidget {
   const WithdrawalScreen({super.key});

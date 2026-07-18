@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../domain/models/matched_transaction.dart';
-import '../application/linked_bank_payments_provider.dart';
+import '../../domain/models/matched_transaction.dart';
+import '../../application/linked_bank_payments_provider.dart';
 
 class LinkedBankPaymentsScreen extends ConsumerStatefulWidget {
   const LinkedBankPaymentsScreen({super.key});

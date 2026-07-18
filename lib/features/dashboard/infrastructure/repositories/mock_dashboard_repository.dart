@@ -1,7 +1,7 @@
 import '../../../../core/network/api_result.dart';
-import '../../transactions/domain/models/transaction_model.dart';
-import '../domain/models/dashboard_data.dart';
-import '../domain/repositories/dashboard_repository.dart';
+import '../../../transactions/domain/models/transaction_model.dart';
+import '../../domain/models/dashboard_data.dart';
+import '../../domain/repositories/dashboard_repository.dart';
 
 class MockDashboardRepository implements DashboardRepository {
   MockDashboardRepository();
