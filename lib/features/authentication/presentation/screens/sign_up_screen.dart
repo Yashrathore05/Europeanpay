@@ -6,6 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../../shared/widgets/branding/eu_brand_mark.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 import '../../../../shared/widgets/inputs/eu_inputs.dart';
 import '../../application/auth_provider.dart';
@@ -103,15 +104,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const EuBrandMark(size: 48, showWordmark: true),
+                const SizedBox(height: AppSpacing.xxl),
                 Text(
-                  'Create Account',
-                  style: AppTypography.displaySmall.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
+                  'Create your secure account',
+                  style: AppTypography.displaySmall.copyWith(color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Join European Pay and start transacting across Europe',
+                  'Set up a simulated European Pay profile with persistent session, rewards, and banking-style security.',
                   style: AppTypography.bodyLarge.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -300,6 +301,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   label: 'Create Account',
                   onPressed: _signUp,
                   isLoading: _isLoading,
+                  icon: Icons.verified_user_rounded,
                 ),
                 const SizedBox(height: AppSpacing.xl),
 

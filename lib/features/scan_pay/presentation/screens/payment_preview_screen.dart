@@ -6,6 +6,9 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/payment_simulator.dart';
+import '../../../../core/services/security_service.dart';
+import '../../../../core/services/session_store.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 
 class PaymentPreviewScreen extends ConsumerStatefulWidget {
@@ -18,21 +21,24 @@ class PaymentPreviewScreen extends ConsumerStatefulWidget {
 
 class _PaymentPreviewScreenState extends ConsumerState<PaymentPreviewScreen> {
   void _showPinGate(BuildContext context) {
+    final String merchantName = widget.paymentData['merchant'] as String? ?? 'Café de Flore';
+    final double amount = (widget.paymentData['amount'] as num?)?.toDouble() ?? 12.50;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return const _PinGateSheet();
+        return _PinGateSheet(amount: amount, merchantName: merchantName);
       },
-    ).then((verified) {
-      if (verified == true && mounted) {
+    ).then((receipt) {
+      if (receipt is SimulatedPaymentReceipt && mounted) {
         context.pushNamed(
           RouteNames.paymentResult,
           extra: {
-            'amount': 12.50,
-            'merchant': 'Café de Flore',
-            'status': 'success',
+            'amount': amount,
+            'merchant': merchantName,
+            ...receipt.toJson(),
           },
         );
       }
@@ -117,7 +123,13 @@ class _PaymentPreviewScreenState extends ConsumerState<PaymentPreviewScreen> {
 }
 
 class _PinGateSheet extends StatefulWidget {
-  const _PinGateSheet();
+  const _PinGateSheet({
+    required this.amount,
+    required this.merchantName,
+  });
+
+  final double amount;
+  final String merchantName;
 
   @override
   State<_PinGateSheet> createState() => _PinGateSheetState();
@@ -127,6 +139,9 @@ class _PinGateSheetState extends State<_PinGateSheet> {
   String _pin = '';
   bool _isError = false;
   bool _isLoading = false;
+  final _sessionStore = const SessionStore();
+  final _securityService = SecurityService();
+  final _paymentSimulator = PaymentSimulator();
 
   void _onKeyTap(String key) {
     if (_pin.length >= AppConstants.pinLength || _isLoading) return;
@@ -149,12 +164,13 @@ class _PinGateSheetState extends State<_PinGateSheet> {
 
   Future<void> _verifyAndProcess() async {
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 800));
+    final savedPin = await _sessionStore.readPin();
     if (!mounted) return;
 
-    // Simulate PIN verification - default mock is '1234'
-    if (_pin == '1234' || _pin == '0000') {
-      Navigator.pop(context, true);
+    if (_pin == savedPin || _pin == '0000') {
+      final receipt = await _paymentSimulator.authorize(amount: widget.amount);
+      if (!mounted) return;
+      Navigator.pop(context, receipt);
     } else {
       setState(() {
         _isLoading = false;
@@ -162,6 +178,28 @@ class _PinGateSheetState extends State<_PinGateSheet> {
         _pin = '';
       });
     }
+  }
+
+  Future<void> _authorizeWithBiometrics() async {
+    setState(() => _isLoading = true);
+    final biometricEnabled = await _sessionStore.isBiometricEnabled();
+    final verified = biometricEnabled && await _securityService.authenticatePayment();
+    if (!mounted) return;
+
+    if (verified) {
+      final receipt = await _paymentSimulator.authorize(amount: widget.amount);
+      if (!mounted) return;
+      Navigator.pop(context, receipt);
+      return;
+    }
+
+    setState(() => _isLoading = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Fingerprint unavailable here. Use PIN 1234 for the simulated flow.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -184,17 +222,27 @@ class _PinGateSheetState extends State<_PinGateSheet> {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          const Icon(Icons.security_rounded, size: 36, color: AppColors.primary),
+          const Icon(Icons.verified_user_rounded, size: 36, color: AppColors.primary),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Confirm Security PIN',
+            'Authorize payment',
             style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            _isError ? 'Incorrect PIN. Try again (e.g. 1234)' : 'Enter your 4-digit PIN to authorize payment',
+            _isError ? 'Incorrect PIN. Try again.' : 'Use fingerprint or enter your 4-digit banking PIN',
             style: AppTypography.bodyMedium.copyWith(
               color: _isError ? AppColors.error : AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+            child: EuSecondaryButton(
+              label: 'Use fingerprint',
+              onPressed: _authorizeWithBiometrics,
+              isLoading: _isLoading,
+              icon: Icons.fingerprint_rounded,
             ),
           ),
           const SizedBox(height: AppSpacing.xxl),

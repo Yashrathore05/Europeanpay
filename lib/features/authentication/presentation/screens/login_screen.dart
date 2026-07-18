@@ -5,7 +5,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../core/services/security_service.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../../shared/widgets/branding/eu_brand_mark.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 import '../../../../shared/widgets/inputs/eu_inputs.dart';
 import '../../application/auth_provider.dart';
@@ -25,6 +27,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
   bool _isLoading = false;
+  bool _isBiometricLoading = false;
+  final _securityService = SecurityService();
 
   @override
   void dispose() {
@@ -61,6 +65,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _unlockWithBiometrics() async {
+    setState(() => _isBiometricLoading = true);
+    final verified = await _securityService.authenticatePayment();
+    if (!mounted) return;
+
+    setState(() => _isBiometricLoading = false);
+    final authState = ref.read(authNotifierProvider);
+    if (verified && authState is Authenticated) {
+      context.goNamed(RouteNames.dashboard);
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('No saved secure session found. Sign in once to enable biometric unlock.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,23 +98,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: AppSpacing.section),
-                // Logo
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.euro_rounded,
-                    size: 28,
-                    color: Colors.white,
-                  ),
-                ),
+                const EuBrandMark(size: 54, showWordmark: true),
                 const SizedBox(height: AppSpacing.xxl),
                 Text(
-                  'Welcome Back',
+                  'Welcome back',
                   style: AppTypography.displaySmall.copyWith(
                     color: AppColors.textPrimary,
                   ),
@@ -187,6 +198,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   label: 'Sign In',
                   onPressed: _login,
                   isLoading: _isLoading,
+                  icon: Icons.lock_open_rounded,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                EuSecondaryButton(
+                  label: 'Use fingerprint',
+                  onPressed: _unlockWithBiometrics,
+                  isLoading: _isBiometricLoading,
+                  icon: Icons.fingerprint_rounded,
                 ),
                 const SizedBox(height: AppSpacing.xxl),
 

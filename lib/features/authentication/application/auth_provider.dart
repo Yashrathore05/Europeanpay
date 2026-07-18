@@ -90,8 +90,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
     return result.when(
       success: (user) {
-        // Keeps user in loading/unverified state till OTP is done.
-        state = Unauthenticated(error: 'Verification required');
+        state = Authenticated(user);
         return true;
       },
       failure: (error) {

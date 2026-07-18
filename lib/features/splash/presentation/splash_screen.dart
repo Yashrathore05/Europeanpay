@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/router/route_names.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../shared/widgets/branding/eu_brand_mark.dart';
+import '../../authentication/application/auth_provider.dart';
 
 /// Splash screen with animated EU Pay branding.
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -58,7 +61,10 @@ class _SplashScreenState extends State<SplashScreen>
       Duration(milliseconds: AppConstants.splashDurationMs),
       () {
         if (mounted) {
-          context.goNamed(RouteNames.onboarding);
+          final authState = ref.read(authNotifierProvider);
+          context.goNamed(
+            authState is Authenticated ? RouteNames.dashboard : RouteNames.onboarding,
+          );
         }
       },
     );
@@ -81,9 +87,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF0A1628),
-              Color(0xFF1B4DFF),
-              Color(0xFF0033CC),
+              AppColors.ink,
+              AppColors.primary,
+              AppColors.secondaryDark,
             ],
           ),
         ),
@@ -97,24 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo icon
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.euro_rounded,
-                        size: 48,
-                        color: Colors.white,
-                      ),
-                    ),
+                    const EuBrandMark(size: 96, onDark: true),
                     const SizedBox(height: 32),
                     // App name
                     SlideTransition(
@@ -130,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Your EU Payment Companion',
+                            'Private payments. Real-time rewards.',
                             style: AppTypography.bodyMedium.copyWith(
                               color: Colors.white.withValues(alpha: 0.7),
                               letterSpacing: 0.5,

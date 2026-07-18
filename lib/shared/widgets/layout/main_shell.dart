@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../features/authentication/application/auth_provider.dart';
 import '../../../core/router/route_names.dart';
+import '../branding/eu_brand_mark.dart';
 
 /// Main shell widget providing bottom navigation for the 5 primary tabs.
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   const MainShell({super.key, required this.child});
 
   final Widget child;
@@ -52,12 +55,13 @@ class MainShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = _getCurrentIndex(context);
+    final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(
       body: child,
-      drawer: _buildDrawer(context),
+      drawer: _buildDrawer(context, ref, authState),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
@@ -169,7 +173,8 @@ class MainShell extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
+  Widget _buildDrawer(BuildContext context, WidgetRef ref, AuthState authState) {
+    final user = authState is Authenticated ? authState.user : null;
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -183,18 +188,10 @@ class MainShell extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
-                    radius: 32,
-                    backgroundColor: Colors.white24,
-                    child: Icon(
-                      Icons.person_rounded,
-                      size: 32,
-                      color: Colors.white,
-                    ),
-                  ),
+                  const EuBrandMark(size: 56, onDark: true),
                   const SizedBox(height: AppSpacing.lg),
-                  const Text(
-                    'Jean Dupont',
+                  Text(
+                    user?.fullName ?? 'European Pay',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -203,7 +200,7 @@ class MainShell extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'EUAB12CD34EF',
+                    user?.euPayId ?? 'Secure simulated banking',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 13,
@@ -270,7 +267,7 @@ class MainShell extends StatelessWidget {
               color: AppColors.error,
               onTap: () {
                 Navigator.pop(context);
-                _showSignOutDialog(context);
+                _showSignOutDialog(context, ref);
               },
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -280,7 +277,7 @@ class MainShell extends StatelessWidget {
     );
   }
 
-  void _showSignOutDialog(BuildContext context) {
+  void _showSignOutDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -292,8 +289,10 @@ class MainShell extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(ctx);
+              await ref.read(authNotifierProvider.notifier).logout();
+              if (!context.mounted) return;
               context.goNamed(RouteNames.login);
             },
             child: Text(

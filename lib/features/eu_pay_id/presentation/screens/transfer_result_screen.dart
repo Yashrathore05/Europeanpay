@@ -12,6 +12,16 @@ class TransferResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amount = (resultData['amount'] as num?)?.toDouble() ?? 0;
+    final recipientName = resultData['recipientName'] as String? ?? 'Recipient';
+    final recipientId = resultData['recipientId'] as String? ?? 'EU Pay ID';
+    final status = resultData['status'] as String? ?? 'completed';
+    final transactionId = resultData['transactionId'] as String? ?? 'EUP-SIMULATED';
+    final bankReference = resultData['bankReference'] as String? ?? 'BNK-SIMULATED';
+    final schemeReference = resultData['schemeReference'] as String? ?? 'EU Pay ID';
+    final settlementEta = resultData['settlementEta'] as String? ?? 'Instantly settled';
+    final isPending = status == 'pending';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -21,20 +31,23 @@ class TransferResultScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              Container(width: 96, height: 96, decoration: const BoxDecoration(color: AppColors.successLight, shape: BoxShape.circle), child: const Icon(Icons.check_circle_rounded, size: 56, color: AppColors.success)),
+              Container(width: 96, height: 96, decoration: BoxDecoration(color: isPending ? AppColors.pendingBg : AppColors.successLight, shape: BoxShape.circle), child: Icon(isPending ? Icons.schedule_rounded : Icons.check_circle_rounded, size: 56, color: isPending ? AppColors.pending : AppColors.success)),
               const SizedBox(height: AppSpacing.xxl),
-              Text('Transfer Successful', style: AppTypography.headlineMedium),
+              Text(isPending ? 'Transfer Pending' : 'Transfer Successful', style: AppTypography.headlineMedium),
               const SizedBox(height: AppSpacing.sm),
-              Text('€50.00 sent to Marie Laurent', style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary)),
+              Text('€${amount.toStringAsFixed(2)} sent to $recipientName', style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary)),
+              const SizedBox(height: AppSpacing.sm),
+              Text(settlementEta, textAlign: TextAlign.center, style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary)),
               const SizedBox(height: AppSpacing.xxl),
               Container(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(color: AppColors.surfaceVariant, borderRadius: BorderRadius.circular(AppSpacing.radiusMd)),
                 child: Column(children: [
-                  _InfoRow('Transaction ID', 'TXN20260718002'),
-                  _InfoRow('Bank Transfer ID', 'BNK98765432'),
-                  _InfoRow('Reference', 'EUPAY-REF-001'),
-                  _InfoRow('Status', 'Completed'),
+                  _InfoRow('Transaction ID', transactionId),
+                  _InfoRow('Bank Transfer ID', bankReference),
+                  _InfoRow('Recipient', recipientId),
+                  _InfoRow('Reference', schemeReference),
+                  _InfoRow('Status', status.toUpperCase()),
                 ]),
               ),
               const Spacer(),

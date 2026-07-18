@@ -1,10 +1,13 @@
 import '../../../../core/network/api_result.dart';
+import '../../../../core/services/session_store.dart';
 import '../../domain/models/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class MockAuthRepository implements AuthRepository {
-  MockAuthRepository();
+  MockAuthRepository({SessionStore sessionStore = const SessionStore()})
+      : _sessionStore = sessionStore;
 
+  final SessionStore _sessionStore;
   User? _currentUser;
 
   final _mockUser = const User(
@@ -34,6 +37,7 @@ class MockAuthRepository implements AuthRepository {
       ));
     }
     _currentUser = _mockUser.copyWith(email: email);
+    await _sessionStore.saveUser(_currentUser!);
     return ApiResult.success(_currentUser!);
   }
 
@@ -59,6 +63,7 @@ class MockAuthRepository implements AuthRepository {
       loyaltyTier: 'Standard',
       linkedBanksCount: 0,
     );
+    await _sessionStore.saveUser(_currentUser!);
     return ApiResult.success(_currentUser!);
   }
 
@@ -72,6 +77,7 @@ class MockAuthRepository implements AuthRepository {
     if (code == '123456' || code == '000000') {
       if (_currentUser != null && _currentUser!.email == email) {
         _currentUser = _currentUser!.copyWith(isVerified: true);
+        await _sessionStore.saveUser(_currentUser!);
       }
       return ApiResult.success(true);
     }
@@ -122,6 +128,7 @@ class MockAuthRepository implements AuthRepository {
     }
     if (_currentUser != null) {
       _currentUser = _currentUser!.copyWith(isVerified: true);
+      await _sessionStore.saveUser(_currentUser!);
       return ApiResult.success(_currentUser!);
     }
     return ApiResult.failure(const ApiException(
@@ -140,6 +147,7 @@ class MockAuthRepository implements AuthRepository {
       ));
     }
     _currentUser = _mockUser;
+    await _sessionStore.saveUser(_currentUser!);
     return ApiResult.success(_currentUser!);
   }
 
@@ -147,12 +155,14 @@ class MockAuthRepository implements AuthRepository {
   Future<ApiResult<void>> logout() async {
     await Future.delayed(const Duration(milliseconds: 400));
     _currentUser = null;
+    await _sessionStore.clear();
     return ApiResult.success(null);
   }
 
   @override
   Future<ApiResult<User?>> getAuthenticatedUser() async {
     await Future.delayed(const Duration(milliseconds: 100));
+    _currentUser ??= await _sessionStore.readUser();
     return ApiResult.success(_currentUser);
   }
 }

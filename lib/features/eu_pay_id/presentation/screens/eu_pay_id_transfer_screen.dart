@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../core/services/payment_simulator.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 import '../../../../shared/widgets/inputs/eu_inputs.dart';
 import '../../application/eu_pay_id_provider.dart';
@@ -25,6 +26,7 @@ class _EuPayIdTransferScreenState extends ConsumerState<EuPayIdTransferScreen> {
   final _noteController = TextEditingController();
   bool _isSending = false;
   Recipient? _verifiedRecipient;
+  final _paymentSimulator = PaymentSimulator();
 
   @override
   void initState() {
@@ -93,11 +95,15 @@ class _EuPayIdTransferScreenState extends ConsumerState<EuPayIdTransferScreen> {
       setState(() => _isSending = false);
       result.when(
         success: (_) {
-          context.pushNamed(RouteNames.transferResult, extra: {
-            'status': 'success',
-            'amount': amount,
-            'recipientName': _verifiedRecipient!.fullName,
-            'recipientId': _verifiedRecipient!.euPayId,
+          _paymentSimulator.authorize(amount: amount, rail: 'EU Pay ID').then((receipt) {
+            if (!mounted) return;
+            context.pushNamed(RouteNames.transferResult, extra: {
+              'amount': amount,
+              'recipientName': _verifiedRecipient!.fullName,
+              'recipientId': _verifiedRecipient!.euPayId,
+              'note': _noteController.text.trim(),
+              ...receipt.toJson(),
+            });
           });
         },
         failure: (error) {

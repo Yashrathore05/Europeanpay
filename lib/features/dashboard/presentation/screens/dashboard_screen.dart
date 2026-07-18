@@ -7,7 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../core/extensions/number_extensions.dart';
-import '../../../../shared/widgets/feedback/eu_feedback.dart';
+import '../../../../shared/widgets/branding/eu_brand_mark.dart';
 import '../../../../shared/widgets/buttons/eu_buttons.dart';
 import '../../../authentication/application/auth_provider.dart';
 import '../../../transactions/domain/models/transaction_model.dart';
@@ -54,15 +54,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               title: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(Icons.euro_rounded, size: 16, color: Colors.white),
-                  ),
+                  const EuBrandMark(size: 28),
                   const SizedBox(width: 8),
                   Text('EU Pay', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w700)),
                 ],
@@ -120,6 +112,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       // Greeting
                       Text('Good evening,', style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary)),
                       Text(greetingName, style: AppTypography.headlineMedium),
+                      const SizedBox(height: AppSpacing.sm),
+                      Row(
+                        children: [
+                          const Icon(Icons.verified_user_rounded, size: 16, color: AppColors.success),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Simulated live banking workspace',
+                            style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: AppSpacing.xl),
 
                       // Wallet Balance Card
@@ -216,9 +219,25 @@ class _WalletCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Total Balance', style: AppTypography.bodyMedium.copyWith(color: Colors.white70)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Available balance', style: AppTypography.bodyMedium.copyWith(color: Colors.white70)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                ),
+                child: Text('SEPA Instant', style: AppTypography.labelSmall.copyWith(color: Colors.white)),
+              ),
+            ],
+          ),
           const SizedBox(height: AppSpacing.sm),
           Text(balance.toEur, style: AppTypography.amountLarge.copyWith(color: Colors.white)),
+          const SizedBox(height: AppSpacing.sm),
+          Text('Main account • FR76 **** **** 0189', style: AppTypography.bodySmall.copyWith(color: Colors.white60)),
           const SizedBox(height: AppSpacing.lg),
           Row(
             children: [

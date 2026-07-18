@@ -33,8 +33,24 @@ jobs:
       - name: Recreate Android platform files
         run: |
           flutter create --platforms=android --project-name=european_pay .
-          # Ensure internet/network permissions are in the generated AndroidManifest if needed
-          # Flutter create automatically includes internet permissions in debug, but we ensure it works for release.
+          python3 - <<'PY'
+          from pathlib import Path
+
+          manifest = Path("android/app/src/main/AndroidManifest.xml")
+          text = manifest.read_text()
+          permission = '<uses-permission android:name="android.permission.USE_BIOMETRIC" />'
+          if permission not in text:
+              text = text.replace("    <application", f"    {permission}\n\n    <application", 1)
+              manifest.write_text(text)
+
+          for activity in Path("android/app/src/main").rglob("MainActivity.kt"):
+              source = activity.read_text()
+              source = source.replace(
+                  "import io.flutter.embedding.android.FlutterActivity",
+                  "import io.flutter.embedding.android.FlutterFragmentActivity",
+              ).replace("FlutterActivity()", "FlutterFragmentActivity()")
+              activity.write_text(source)
+          PY
 
       - name: Get Flutter dependencies
         run: flutter pub get
