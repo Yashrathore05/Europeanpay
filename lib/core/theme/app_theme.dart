@@ -10,7 +10,7 @@ abstract final class AppTheme {
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       primary: AppColors.primary,
       onPrimary: AppColors.textOnPrimary,
       primaryContainer: AppColors.primarySurface,
@@ -36,7 +36,7 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
 
       // ── App Bar ──────────────────────────────────────────────
@@ -46,7 +46,7 @@ abstract final class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0.5,
         centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         titleTextStyle: AppTypography.titleLarge.copyWith(
           color: AppColors.textPrimary,
         ),
@@ -106,7 +106,7 @@ abstract final class AppTheme {
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
           side: const BorderSide(color: AppColors.borderLight),
         ),
         margin: EdgeInsets.zero,
@@ -120,7 +120,7 @@ abstract final class AppTheme {
           elevation: 0,
           minimumSize: const Size(double.infinity, AppSpacing.buttonHeight),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
           ),
           textStyle: AppTypography.button,
           padding: const EdgeInsets.symmetric(
@@ -137,7 +137,7 @@ abstract final class AppTheme {
           elevation: 0,
           minimumSize: const Size(double.infinity, AppSpacing.buttonHeight),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
           ),
           side: const BorderSide(color: AppColors.primary, width: 1.5),
           textStyle: AppTypography.button,
@@ -172,24 +172,24 @@ abstract final class AppTheme {
           vertical: AppSpacing.lg,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          borderSide: const BorderSide(color: AppColors.border, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          borderSide: const BorderSide(color: AppColors.border, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         hintStyle: AppTypography.bodyMedium.copyWith(
           color: AppColors.textTertiary,

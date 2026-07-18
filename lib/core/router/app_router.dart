@@ -33,6 +33,7 @@ import '../../features/eu_pay_id/presentation/screens/transfer_result_screen.dar
 import '../../features/my_qr/presentation/screens/my_qr_screen.dart';
 import '../../features/my_network/presentation/screens/my_network_screen.dart';
 import '../../features/bank_accounts/presentation/screens/bank_accounts_screen.dart';
+import '../../features/bank_accounts/presentation/screens/bank_connect_screen.dart';
 import '../../features/bank_accounts/presentation/screens/account_detail_screen.dart';
 import '../../features/bank_accounts/presentation/screens/bank_transactions_screen.dart';
 import '../../features/linked_bank_payments/presentation/screens/linked_bank_payments_screen.dart';
@@ -230,6 +231,11 @@ final GoRouter appRouter = GoRouter(
       path: '/bank-accounts',
       name: RouteNames.bankAccounts,
       builder: (context, state) => const BankAccountsScreen(),
+    ),
+    GoRoute(
+      path: '/bank-connect',
+      name: RouteNames.bankConnect,
+      builder: (context, state) => const BankConnectScreen(),
     ),
     GoRoute(
       path: '/account-detail/:id',

@@ -6,4 +6,5 @@ abstract class BankAccountRepository {
   Future<ApiResult<List<BankAccount>>> syncBankAccounts();
   Future<ApiResult<BankAccount>> updatePrimaryStatus(String accountId, bool isPrimary);
   Future<ApiResult<bool>> disconnectBankAccount(String accountId);
+  Future<ApiResult<BankAccount>> addBankAccount(BankAccount account);
 }

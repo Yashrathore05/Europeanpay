@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../shared/widgets/buttons/eu_buttons.dart';
 
-class QrScannerScreen extends StatelessWidget {
+class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
+
+  @override
+  State<QrScannerScreen> createState() => _QrScannerScreenState();
+}
+
+class _QrScannerScreenState extends State<QrScannerScreen> {
+  bool _isFlashOn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -12,69 +21,122 @@ class QrScannerScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Camera preview placeholder
-          Container(color: Colors.black),
-          // Scanner overlay
-          Center(
-            child: Container(
-              width: 280, height: 280,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.primary, width: 3),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Stack(
-                children: [
-                  // Corner accents
-                  ..._buildCorners(),
-                ],
+          // Simulated Camera Preview
+          Container(
+            color: Colors.black,
+            child: Center(
+              child: Opacity(
+                opacity: 0.3,
+                child: Icon(
+                  Icons.photo_camera_back_outlined,
+                  size: 120,
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
           ),
-          // Top bar
+          
+          // Viewfinder Frame
+          Center(
+            child: Container(
+              width: 260,
+              height: 260,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              ),
+              child: Stack(
+                children: _buildCorners(),
+              ),
+            ),
+          ),
+
+          // Header
           Positioned(
-            top: 0, left: 0, right: 0,
+            top: 0,
+            left: 0,
+            right: 0,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(width: 40),
-                    Text('Scan QR Code', style: AppTypography.titleLarge.copyWith(color: Colors.white)),
-                    const SizedBox(width: 40),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 24),
+                      onPressed: () => context.pop(),
+                    ),
+                    Text(
+                      'Scan QR Code',
+                      style: AppTypography.titleLarge.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        _isFlashOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+                        color: _isFlashOn ? AppColors.primary : Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isFlashOn = !_isFlashOn;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
             ),
           ),
-          // Instruction text
+
+          // Instructions & Guide
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: 0, right: 0,
-            child: Text(
-              'Align the QR code within the frame',
-              style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
-              textAlign: TextAlign.center,
+            top: MediaQuery.of(context).size.height * 0.22,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+              child: Text(
+                'Align merchant or invoice QR code within the frame',
+                style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-          // Bottom controls
+
+          // Quick actions (Gallery / Enter ID Manually)
           Positioned(
-            bottom: 0, left: 0, right: 0,
+            bottom: AppSpacing.xxxl,
+            left: AppSpacing.xxl,
+            right: AppSpacing.xxl,
             child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(AppSpacing.xxl),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.7),
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _ControlButton(icon: Icons.flash_on_rounded, label: 'Flash', onTap: () {}),
-                    _ControlButton(icon: Icons.flip_camera_ios_rounded, label: 'Flip', onTap: () {}),
-                    _ControlButton(icon: Icons.photo_library_outlined, label: 'Gallery', onTap: () {}),
-                  ],
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  EuSecondaryButton(
+                    label: 'Upload from Gallery',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Accessing gallery...')),
+                      );
+                    },
+                    icon: Icons.photo_library_outlined,
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  EuTextButton(
+                    label: 'Enter Merchant ID Manually',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Opening manual entry portal...')),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),
@@ -84,55 +146,69 @@ class QrScannerScreen extends StatelessWidget {
   }
 
   static List<Widget> _buildCorners() {
+    const double length = 24;
+    const double thickness = 3;
     return [
-      Positioned(top: 0, left: 0, child: _Corner(alignment: Alignment.topLeft)),
-      Positioned(top: 0, right: 0, child: _Corner(alignment: Alignment.topRight)),
-      Positioned(bottom: 0, left: 0, child: _Corner(alignment: Alignment.bottomLeft)),
-      Positioned(bottom: 0, right: 0, child: _Corner(alignment: Alignment.bottomRight)),
-    ];
-  }
-}
-
-class _Corner extends StatelessWidget {
-  const _Corner({required this.alignment});
-  final Alignment alignment;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 24, height: 24,
-      decoration: BoxDecoration(
-        border: Border(
-          top: alignment == Alignment.topLeft || alignment == Alignment.topRight ? const BorderSide(color: AppColors.primary, width: 4) : BorderSide.none,
-          bottom: alignment == Alignment.bottomLeft || alignment == Alignment.bottomRight ? const BorderSide(color: AppColors.primary, width: 4) : BorderSide.none,
-          left: alignment == Alignment.topLeft || alignment == Alignment.bottomLeft ? const BorderSide(color: AppColors.primary, width: 4) : BorderSide.none,
-          right: alignment == Alignment.topRight || alignment == Alignment.bottomRight ? const BorderSide(color: AppColors.primary, width: 4) : BorderSide.none,
+      // Top Left Corner
+      Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+          width: length,
+          height: length,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.primary, width: thickness),
+              left: BorderSide(color: AppColors.primary, width: thickness),
+            ),
+          ),
         ),
       ),
-    );
-  }
-}
-
-class _ControlButton extends StatelessWidget {
-  const _ControlButton({required this.icon, required this.label, required this.onTap});
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 52, height: 52,
-            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle),
-            child: Icon(icon, color: Colors.white, size: 24),
+      // Top Right Corner
+      Positioned(
+        top: 0,
+        right: 0,
+        child: Container(
+          width: length,
+          height: length,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.primary, width: thickness),
+              right: BorderSide(color: AppColors.primary, width: thickness),
+            ),
           ),
-          const SizedBox(height: 6),
-          Text(label, style: AppTypography.labelSmall.copyWith(color: Colors.white70)),
-        ],
+        ),
       ),
-    );
+      // Bottom Left Corner
+      Positioned(
+        bottom: 0,
+        left: 0,
+        child: Container(
+          width: length,
+          height: length,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.primary, width: thickness),
+              left: BorderSide(color: AppColors.primary, width: thickness),
+            ),
+          ),
+        ),
+      ),
+      // Bottom Right Corner
+      Positioned(
+        bottom: 0,
+        right: 0,
+        child: Container(
+          width: length,
+          height: length,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.primary, width: thickness),
+              right: BorderSide(color: AppColors.primary, width: thickness),
+            ),
+          ),
+        ),
+      ),
+    ];
   }
 }

@@ -23,7 +23,8 @@ class _LinkedBankPaymentsScreenState extends ConsumerState<LinkedBankPaymentsScr
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Linked Bank Payments'),
+        title: const Text('Match Payments'),
+        centerTitle: false,
       ),
       body: matchesState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -48,7 +49,7 @@ class _LinkedBankPaymentsScreenState extends ConsumerState<LinkedBankPaymentsScr
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Stats
+                // Stats Grid
                 Row(
                   children: [
                     _StatCard('Matched', '$matchedCount', AppColors.success),
@@ -58,23 +59,43 @@ class _LinkedBankPaymentsScreenState extends ConsumerState<LinkedBankPaymentsScr
                     _StatCard('Rejected', '$rejectedCount', AppColors.error),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.xxl),
+                const SizedBox(height: AppSpacing.xl),
 
-                // Filter chips
-                Wrap(
-                  spacing: 8,
-                  children: ['All', 'Pending', 'Confirmed', 'Rejected'].map((filter) {
-                    final isSelected = _selectedFilter == filter;
-                    return ChoiceChip(
-                      label: Text(filter),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() => _selectedFilter = filter);
-                        }
-                      },
-                    );
-                  }).toList(),
+                // Horizontal Filter Chips
+                SizedBox(
+                  height: 38,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: ['All', 'Pending', 'Confirmed', 'Rejected'].map((filter) {
+                      final isSelected = _selectedFilter == filter;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: AppSpacing.sm),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() => _selectedFilter = filter);
+                          },
+                          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primary : AppColors.surface,
+                              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                              border: Border.all(
+                                color: isSelected ? AppColors.primary : AppColors.border,
+                              ),
+                            ),
+                            child: Text(
+                              filter,
+                              style: AppTypography.labelMedium.copyWith(
+                                color: isSelected ? AppColors.textOnPrimary : AppColors.textSecondary,
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
@@ -139,19 +160,31 @@ class _StatCard extends StatelessWidget {
   const _StatCard(this.label, this.value, this.color);
   final String label, value;
   final Color color;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.08),
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+          border: Border.all(color: AppColors.border, width: 1),
         ),
         child: Column(
           children: [
-            Text(value, style: AppTypography.headlineMedium.copyWith(color: color)),
-            Text(label, style: AppTypography.labelSmall.copyWith(color: color)),
+            Text(
+              value,
+              style: AppTypography.headlineMedium.copyWith(
+                color: color,
+                fontWeight: FontWeight.w750,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
+            ),
           ],
         ),
       ),
@@ -174,13 +207,15 @@ class _MatchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPending = match.status == 'pending';
     final isMatched = match.status == 'matched';
-    final isRejected = match.status == 'rejected';
 
     Color matchColor = AppColors.pending;
+    Color matchBgColor = AppColors.pendingBg;
     if (match.confidence >= 90) {
       matchColor = AppColors.success;
+      matchBgColor = AppColors.successLight;
     } else if (match.confidence < 80) {
       matchColor = AppColors.error;
+      matchBgColor = AppColors.failedBg;
     }
 
     return Container(
@@ -189,47 +224,78 @@ class _MatchCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text('Match Ref: ${match.id.toUpperCase()}', style: AppTypography.titleSmall),
+              Text(
+                'Match Ref: ${match.id.toUpperCase()}',
+                style: AppTypography.mono.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: matchColor.withValues(alpha: 0.1),
+                  color: matchBgColor,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
                 ),
                 child: Text(
                   '${match.confidence}% match',
-                  style: AppTypography.labelSmall.copyWith(color: matchColor),
+                  style: AppTypography.labelSmall.copyWith(
+                    color: matchColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Left: PSD2 Bank Transaction Data
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(AppSpacing.md),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Bank (PSD2)', style: AppTypography.labelSmall.copyWith(color: AppColors.textTertiary)),
+                      Text(
+                        'Bank (PSD2)',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.textTertiary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '€${match.bankTxnAmount.toStringAsFixed(2)}',
+                        style: AppTypography.bodyLarge.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w750,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
                       const SizedBox(height: 2),
-                      Text('€${match.bankTxnAmount.toStringAsFixed(2)}', style: AppTypography.titleSmall),
                       Text(
                         match.bankTxnName,
-                        style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary),
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                          height: 1.2,
+                        ),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -237,25 +303,45 @@ class _MatchCard extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(Icons.compare_arrows_rounded, color: AppColors.primary),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xl),
+                child: Icon(Icons.compare_arrows_rounded, color: AppColors.primary, size: 20),
               ),
+              // Right: EU Pay wallet payment request
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(AppSpacing.md),
                   decoration: BoxDecoration(
                     color: AppColors.primarySurface,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('EU Pay Wallet', style: AppTypography.labelSmall.copyWith(color: AppColors.textTertiary)),
+                      Text(
+                        'EU Pay Wallet',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '€${match.euPayTxnAmount.toStringAsFixed(2)}',
+                        style: AppTypography.bodyLarge.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w750,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
                       const SizedBox(height: 2),
-                      Text('€${match.euPayTxnAmount.toStringAsFixed(2)}', style: AppTypography.titleSmall),
                       Text(
                         match.euPayTxnName,
-                        style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary),
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                          height: 1.2,
+                        ),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -271,14 +357,17 @@ class _MatchCard extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: onReject,
-                    child: const Text('Reject Match'),
+                    child: Text(
+                      'Reject Match',
+                      style: AppTypography.button.copyWith(color: AppColors.error),
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: onConfirm,
-                    icon: const Icon(Icons.star_rounded, size: 18),
+                    icon: const Icon(Icons.star_rounded, size: 16),
                     label: const Text('Confirm & Claim'),
                   ),
                 ),
@@ -290,10 +379,11 @@ class _MatchCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: isMatched
-                      ? AppColors.success.withValues(alpha: 0.1)
-                      : AppColors.error.withValues(alpha: 0.1),
+                  color: isMatched ? AppColors.successLight : AppColors.failedBg,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  border: Border.all(
+                    color: isMatched ? AppColors.success.withValues(alpha: 0.3) : AppColors.error.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Text(
                   isMatched ? 'Reconciled & Points Credited' : 'Match Rejected',

@@ -4,98 +4,98 @@ import 'package:flutter/material.dart';
 /// Designed for a premium fintech application with a clean, trustworthy palette.
 abstract final class AppColors {
   // ── Brand Primary ──────────────────────────────────────────────
-  static const Color ink = Color(0xFF07111F);
-  static const Color brandLine = Color(0xFF1B2A41);
-  static const Color primary = Color(0xFF10233F);
-  static const Color primaryLight = Color(0xFF28405F);
-  static const Color primaryDark = Color(0xFF07111F);
-  static const Color primarySurface = Color(0xFFEFF4F8);
+  static const Color ink = Color(0xFF09090B);
+  static const Color brandLine = Color(0xFF27272A);
+  static const Color primary = Color(0xFF3B82F6);
+  static const Color primaryLight = Color(0xFF60A5FA);
+  static const Color primaryDark = Color(0xFF1D4ED8);
+  static const Color primarySurface = Color(0x1A3B82F6); // 10% opacity blue
 
   // ── Brand Secondary ────────────────────────────────────────────
-  static const Color secondary = Color(0xFF0F8B6F);
-  static const Color secondaryLight = Color(0xFF38A98E);
-  static const Color secondaryDark = Color(0xFF08654F);
-  static const Color secondarySurface = Color(0xFFE8F5F1);
+  static const Color secondary = Color(0xFF10B981);
+  static const Color secondaryLight = Color(0xFF34D399);
+  static const Color secondaryDark = Color(0xFF047857);
+  static const Color secondarySurface = Color(0x1A10B981); // 10% opacity green
 
   // ── Neutrals ───────────────────────────────────────────────────
   static const Color white = Color(0xFFFFFFFF);
-  static const Color background = Color(0xFFF4F6F8);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFECEFF3);
-  static const Color border = Color(0xFFD8DEE6);
-  static const Color borderLight = Color(0xFFE8EDF2);
-  static const Color divider = Color(0xFFE1E6EC);
+  static const Color background = Color(0xFF09090B);
+  static const Color surface = Color(0xFF121214);
+  static const Color surfaceVariant = Color(0xFF1A1A1E); // Level 2 surfaces/modal/inputs
+  static const Color border = Color(0xFF27272A);
+  static const Color borderLight = Color(0xFF27272A);
+  static const Color divider = Color(0xFF27272A);
 
   // ── Text ───────────────────────────────────────────────────────
-  static const Color textPrimary = Color(0xFF111827);
-  static const Color textSecondary = Color(0xFF526070);
-  static const Color textTertiary = Color(0xFF7C8998);
-  static const Color textInverse = Color(0xFFFFFFFF);
+  static const Color textPrimary = Color(0xFFF4F4F5);
+  static const Color textSecondary = Color(0xFFA1A1AA);
+  static const Color textTertiary = Color(0xFF71717A);
+  static const Color textInverse = Color(0xFF09090B);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
   // ── Semantic ───────────────────────────────────────────────────
-  static const Color success = Color(0xFF087A5B);
-  static const Color successLight = Color(0xFFE7F5F0);
-  static const Color successDark = Color(0xFF055E45);
+  static const Color success = Color(0xFF10B981);
+  static const Color successLight = Color(0x1A10B981);
+  static const Color successDark = Color(0xFF047857);
 
-  static const Color warning = Color(0xFFB7791F);
-  static const Color warningLight = Color(0xFFFFF6E6);
-  static const Color warningDark = Color(0xFF8A5A14);
+  static const Color warning = Color(0xFFF59E0B);
+  static const Color warningLight = Color(0x1AF59E0B);
+  static const Color warningDark = Color(0xFFB45309);
 
-  static const Color error = Color(0xFFE53935);
-  static const Color errorLight = Color(0xFFFFEBEE);
-  static const Color errorDark = Color(0xFFC62828);
+  static const Color error = Color(0xFFEF4444);
+  static const Color errorLight = Color(0x1AEF4444);
+  static const Color errorDark = Color(0xFFB91C1C);
 
-  static const Color info = Color(0xFF2B6CB0);
-  static const Color infoLight = Color(0xFFE8F1FA);
-  static const Color infoDark = Color(0xFF1A4F85);
+  static const Color info = Color(0xFF3B82F6);
+  static const Color infoLight = Color(0x1A3B82F6);
+  static const Color infoDark = Color(0xFF1D4ED8);
 
   // ── Status ─────────────────────────────────────────────────────
-  static const Color pending = Color(0xFFFFAA00);
-  static const Color pendingBg = Color(0xFFFFF8E8);
-  static const Color completed = Color(0xFF087A5B);
-  static const Color completedBg = Color(0xFFE8F8F0);
-  static const Color failed = Color(0xFFE53935);
-  static const Color failedBg = Color(0xFFFFF0F0);
-  static const Color rejected = Color(0xFFAB47BC);
-  static const Color rejectedBg = Color(0xFFF8EFF9);
-  static const Color expired = Color(0xFF78909C);
-  static const Color expiredBg = Color(0xFFF2F4F5);
+  static const Color pending = Color(0xFFF59E0B);
+  static const Color pendingBg = Color(0x1AF59E0B);
+  static const Color completed = Color(0xFF10B981);
+  static const Color completedBg = Color(0x1A10B981);
+  static const Color failed = Color(0xFFEF4444);
+  static const Color failedBg = Color(0x1AEF4444);
+  static const Color rejected = Color(0xFFEC4899);
+  static const Color rejectedBg = Color(0x1AEC4899);
+  static const Color expired = Color(0xFF71717A);
+  static const Color expiredBg = Color(0x1A71717A);
 
   // ── Loyalty / Points ───────────────────────────────────────────
-  static const Color gold = Color(0xFFC8942E);
-  static const Color goldLight = Color(0xFFFFF6DF);
-  static const Color platinum = Color(0xFF90A4AE);
-  static const Color platinumLight = Color(0xFFECEFF1);
+  static const Color gold = Color(0xFFF59E0B);
+  static const Color goldLight = Color(0x1AF59E0B);
+  static const Color platinum = Color(0xFF94A3B8);
+  static const Color platinumLight = Color(0x1A94A3B8);
 
   // ── Gradients ──────────────────────────────────────────────────
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF10233F), Color(0xFF1E5B4F)],
+    colors: [Color(0xFF09090B), Color(0xFF1E3A8A)],
   );
 
   static const LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF07111F), Color(0xFF17324D)],
+    colors: [Color(0xFF121214), Color(0xFF1E293B)],
   );
 
   static const LinearGradient loyaltyGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFC8942E), Color(0xFF8B611B)],
+    colors: [Color(0xFFB45309), Color(0xFF78350F)],
   );
 
   static const LinearGradient successGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF087A5B), Color(0xFF0F8B6F)],
+    colors: [Color(0xFF047857), Color(0xFF065F46)],
   );
 
   // ── Shimmer ────────────────────────────────────────────────────
-  static const Color shimmerBase = Color(0xFFE8EAED);
-  static const Color shimmerHighlight = Color(0xFFF5F5F5);
+  static const Color shimmerBase = Color(0xFF1A1A1E);
+  static const Color shimmerHighlight = Color(0xFF27272A);
 
   // ── Overlay ────────────────────────────────────────────────────
   static const Color overlay = Color(0x80000000);

@@ -40,7 +40,8 @@ class _BankAccountsScreenState extends ConsumerState<BankAccountsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Bank Accounts'),
+        title: const Text('Connected Banks'),
+        centerTitle: false,
         actions: [
           IconButton(
             icon: _isSyncing
@@ -86,34 +87,34 @@ class _BankAccountsScreenState extends ConsumerState<BankAccountsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Total balance
+                  // Total balance overview card
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(AppSpacing.xl),
                     decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                      border: Border.all(color: AppColors.border, width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Total Balance',
-                              style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
-                            ),
-                          ],
+                        Text(
+                          'Total Linked Balance',
+                          style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
                           '€${totalBalance.toStringAsFixed(2)}',
-                          style: AppTypography.amountLarge.copyWith(color: Colors.white),
+                          style: AppTypography.amountLarge.copyWith(
+                            color: AppColors.textPrimary,
+                            fontFamily: 'monospace',
+                          ),
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
-                          '${accounts.length} accounts linked',
-                          style: AppTypography.bodySmall.copyWith(color: Colors.white60),
+                          '${accounts.length} active open banking connections',
+                          style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary),
                         ),
                       ],
                     ),
@@ -131,7 +132,10 @@ class _BankAccountsScreenState extends ConsumerState<BankAccountsScreen> {
                       ),
                     ),
                   ] else ...[
-                    Text('Linked Banks', style: AppTypography.titleMedium.copyWith(color: AppColors.textSecondary)),
+                    Text(
+                      'Connection Ledger',
+                      style: AppTypography.titleMedium.copyWith(color: AppColors.textSecondary),
+                    ),
                     const SizedBox(height: AppSpacing.md),
                     ListView.separated(
                       shrinkWrap: true,
@@ -173,15 +177,10 @@ class _BankAccountsScreenState extends ConsumerState<BankAccountsScreen> {
                     label: const Text('Linked Bank Payments'),
                   ),
                   const SizedBox(height: AppSpacing.xxl),
-                  EuSecondaryButton(
-                    label: 'Connect New Bank',
+                  EuPrimaryButton(
+                    label: 'Connect New Bank Connection',
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Open Banking linking flow initiated'),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
+                      context.pushNamed(RouteNames.bankConnect);
                     },
                     icon: Icons.add_rounded,
                   ),
@@ -238,7 +237,7 @@ class _AccountCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          border: Border.all(color: AppColors.borderLight),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
@@ -249,22 +248,31 @@ class _AccountCard extends StatelessWidget {
                 color: AppColors.primarySurface,
                 borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
               ),
-              child: const Icon(Icons.account_balance_outlined, color: AppColors.primary, size: 22),
+              child: const Icon(Icons.account_balance_rounded, color: AppColors.primary, size: 22),
             ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$bankName - $name', style: AppTypography.titleSmall),
+                  Text(
+                    '$bankName - $name',
+                    style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w600),
+                  ),
                   Text(
                     '$type • ${iban.replaceAll(' ', '').substring(0, 7)}...',
-                    style: AppTypography.bodySmall.copyWith(color: AppColors.textTertiary),
+                    style: AppTypography.mono.copyWith(color: AppColors.textTertiary, fontSize: 11),
                   ),
                 ],
               ),
             ),
-            Text('€${balance.toStringAsFixed(2)}', style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              '€${balance.toStringAsFixed(2)}',
+              style: AppTypography.titleSmall.copyWith(
+                fontWeight: FontWeight.w750,
+                fontFamily: 'monospace',
+              ),
+            ),
           ],
         ),
       ),

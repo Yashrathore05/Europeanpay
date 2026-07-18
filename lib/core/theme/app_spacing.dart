@@ -47,8 +47,8 @@ abstract final class AppSpacing {
   /// 4px radius
   static const double radiusXs = 4;
 
-  /// 8px radius
-  static const double radiusSm = 8;
+  /// 6px radius
+  static const double radiusSm = 6;
 
   /// 12px radius
   static const double radiusMd = 12;

@@ -61,6 +61,17 @@ class BankAccountsNotifier extends StateNotifier<AsyncValue<List<BankAccount>>> 
       failure: (_) => false,
     );
   }
+
+  Future<bool> addAccount(BankAccount account) async {
+    final result = await _repository.addBankAccount(account);
+    return result.when(
+      success: (data) {
+        load();
+        return true;
+      },
+      failure: (_) => false,
+    );
+  }
 }
 
 final bankAccountsNotifierProvider =

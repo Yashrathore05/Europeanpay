@@ -165,4 +165,10 @@ abstract final class AppTypography {
     height: 1.6,
     letterSpacing: 1.0,
   );
+
+  static TextStyle mono = GoogleFonts.robotoMono(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+  );
 }

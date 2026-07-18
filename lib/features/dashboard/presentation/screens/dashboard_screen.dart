@@ -207,14 +207,8 @@ class _WalletCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.xxl),
       decoration: BoxDecoration(
         gradient: AppColors.cardGradient,
-        borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          )
-        ],
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd), // 12px radius as per bento layout specs
+        border: Border.all(color: AppColors.border, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,37 +216,55 @@ class _WalletCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Available balance', style: AppTypography.bodyMedium.copyWith(color: Colors.white70)),
+              Text('Available balance', style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.12),
+                  color: AppColors.primarySurface,
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                 ),
-                child: Text('SEPA Instant', style: AppTypography.labelSmall.copyWith(color: Colors.white)),
+                child: Text('SEPA Instant', style: AppTypography.labelSmall.copyWith(color: AppColors.primary)),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text(balance.toEur, style: AppTypography.amountLarge.copyWith(color: Colors.white)),
+          Text(
+            balance.toEur,
+            style: AppTypography.amountLarge.copyWith(
+              color: AppColors.textPrimary,
+              fontFamily: 'monospace',
+            ),
+          ),
           const SizedBox(height: AppSpacing.sm),
-          Text('Main account • FR76 **** **** 0189', style: AppTypography.bodySmall.copyWith(color: Colors.white60)),
+          Text(
+            'Main account • FR76 **** **** 0189',
+            style: AppTypography.mono.copyWith(
+              color: AppColors.textTertiary,
+              fontSize: 12,
+            ),
+          ),
           const SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.xs),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.successLight,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
                 ),
                 child: Row(
                   children: [
                     const Icon(Icons.star_rounded, size: 16, color: AppColors.gold),
                     const SizedBox(width: 4),
-                    Text('$points pts', style: AppTypography.labelSmall.copyWith(color: Colors.white)),
-                    Text(' • ${pointsValue.toEur}', style: AppTypography.labelSmall.copyWith(color: Colors.white70)),
+                    Text(
+                      '$points pts',
+                      style: AppTypography.labelSmall.copyWith(color: AppColors.success),
+                    ),
+                    Text(
+                      ' • ${pointsValue.toEur}',
+                      style: AppTypography.labelSmall.copyWith(color: AppColors.success.withValues(alpha: 0.8)),
+                    ),
                   ],
                 ),
               ),
@@ -325,22 +337,48 @@ class _BankLinkBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.secondarySurface,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
-          const Icon(Icons.account_balance_outlined, color: AppColors.secondaryDark, size: 22),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.successLight,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            ),
+            child: const Icon(Icons.sync_rounded, color: AppColors.success, size: 20),
+          ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: Text(
-              '$banksCount bank accounts linked',
-              style: AppTypography.bodySmall.copyWith(color: AppColors.secondaryDark, fontWeight: FontWeight.w500),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Qonto & BNP Paribas Synced',
+                  style: AppTypography.titleSmall.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Synced via Powens API • Just now',
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
             ),
           ),
           TextButton(
             onPressed: () => context.pushNamed(RouteNames.bankAccounts),
-            child: const Text('Manage'),
+            child: Text(
+              'Manage',
+              style: AppTypography.labelMedium.copyWith(color: AppColors.primary),
+            ),
           ),
         ],
       ),

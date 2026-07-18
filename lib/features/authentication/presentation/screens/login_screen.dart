@@ -98,19 +98,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: AppSpacing.section),
-                const EuBrandMark(size: 54, showWordmark: true),
-                const SizedBox(height: AppSpacing.xxl),
-                Text(
-                  'Welcome back',
-                  style: AppTypography.displaySmall.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
+                const Center(
+                  child: EuBrandMark(size: 64, showWordmark: true),
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  'Sign in to your European Pay account',
-                  style: AppTypography.bodyLarge.copyWith(
-                    color: AppColors.textSecondary,
+                const SizedBox(height: AppSpacing.xxl * 1.5),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Sign in to EU Pay',
+                        style: AppTypography.displaySmall.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        'Access your secure European wallet',
+                        style: AppTypography.bodyLarge.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xxxl),
@@ -202,10 +213,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 EuSecondaryButton(
-                  label: 'Use fingerprint',
+                  label: 'Sign in with Face ID',
                   onPressed: _unlockWithBiometrics,
                   isLoading: _isBiometricLoading,
-                  icon: Icons.fingerprint_rounded,
+                  icon: Icons.face_unlock_rounded,
                 ),
                 const SizedBox(height: AppSpacing.xxl),
 

@@ -73,4 +73,17 @@ class MockBankAccountRepository implements BankAccountRepository {
     _accounts.removeWhere((element) => element.id == accountId);
     return ApiResult.success(true);
   }
+
+  @override
+  Future<ApiResult<BankAccount>> addBankAccount(BankAccount account) async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // If it's primary, set other accounts to not primary
+    if (account.isPrimary) {
+      for (int i = 0; i < _accounts.length; i++) {
+        _accounts[i] = _accounts[i].copyWith(isPrimary: false);
+      }
+    }
+    _accounts.add(account);
+    return ApiResult.success(account);
+  }
 }
