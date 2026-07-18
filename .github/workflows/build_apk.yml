@@ -33,7 +33,7 @@ jobs:
 
       - name: Recreate Android platform files
         run: |
-          flutter create --platforms=android .
+          flutter create --platforms=android --project-name=european_pay .
           # Ensure internet/network permissions are in the generated AndroidManifest if needed
           # Flutter create automatically includes internet permissions in debug, but we ensure it works for release.
 
