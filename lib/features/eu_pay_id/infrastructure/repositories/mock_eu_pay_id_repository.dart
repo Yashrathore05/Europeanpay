@@ -11,8 +11,8 @@ class MockEuPayIdRepository implements EuPayIdRepository {
     final normalizedId = euPayId.trim().toUpperCase();
 
     if (normalizedId == 'EUXY98ZW76VU') {
-      return const ApiResult.success(
-        Recipient(
+      return ApiResult.success(
+        const Recipient(
           fullName: 'Marie Laurent',
           euPayId: 'EUXY98ZW76VU',
           type: 'Customer',
@@ -29,8 +29,8 @@ class MockEuPayIdRepository implements EuPayIdRepository {
         ),
       );
     } else {
-      return const ApiResult.failure(
-        ApiException(
+      return ApiResult.failure(
+        const ApiException(
           message: 'Recipient not found. Please check the EU Pay ID.',
           statusCode: 404,
         ),
@@ -46,13 +46,13 @@ class MockEuPayIdRepository implements EuPayIdRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 1200));
     if (amount <= 0) {
-      return const ApiResult.failure(
-        ApiException(
+      return ApiResult.failure(
+        const ApiException(
           message: 'Amount must be greater than zero.',
           statusCode: 400,
         ),
       );
     }
-    return const ApiResult.success(true);
+    return ApiResult.success(true);
   }
 }
