@@ -1,7 +1,6 @@
-import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_result.dart';
-import '../domain/models/loyalty_details.dart';
-import '../domain/repositories/loyalty_repository.dart';
+import '../../domain/models/loyalty_details.dart';
+import '../../domain/repositories/loyalty_repository.dart';
 
 class MockLoyaltyRepository implements LoyaltyRepository {
   MockLoyaltyRepository();
@@ -61,16 +60,16 @@ class MockLoyaltyRepository implements LoyaltyRepository {
   Future<ApiResult<LoyaltyDetails>> withdrawPoints(int pointsAmount) async {
     await Future.delayed(const Duration(milliseconds: 1000));
     if (pointsAmount < 500) {
-      return const ApiResult.failure(
-        ApiException(
+      return ApiResult.failure(
+        const ApiException(
           message: 'Minimum withdrawal is 500 points.',
           statusCode: 400,
         ),
       );
     }
     if (pointsAmount > _loyalty.pointsBalance) {
-      return const ApiResult.failure(
-        ApiException(
+      return ApiResult.failure(
+        const ApiException(
           message: 'Insufficient points balance.',
           statusCode: 400,
         ),

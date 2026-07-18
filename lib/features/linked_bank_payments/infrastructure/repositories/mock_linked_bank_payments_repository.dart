@@ -1,6 +1,6 @@
 import '../../../../core/network/api_result.dart';
-import '../domain/models/matched_transaction.dart';
-import '../domain/repositories/linked_bank_payments_repository.dart';
+import '../../domain/models/matched_transaction.dart';
+import '../../domain/repositories/linked_bank_payments_repository.dart';
 
 class MockLinkedBankPaymentsRepository implements LinkedBankPaymentsRepository {
   MockLinkedBankPaymentsRepository();

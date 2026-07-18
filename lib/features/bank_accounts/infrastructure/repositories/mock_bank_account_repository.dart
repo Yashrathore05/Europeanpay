@@ -1,6 +1,6 @@
 import '../../../../core/network/api_result.dart';
-import '../domain/models/bank_account.dart';
-import '../domain/repositories/bank_account_repository.dart';
+import '../../domain/models/bank_account.dart';
+import '../../domain/repositories/bank_account_repository.dart';
 
 class MockBankAccountRepository implements BankAccountRepository {
   MockBankAccountRepository();
@@ -71,6 +71,6 @@ class MockBankAccountRepository implements BankAccountRepository {
   Future<ApiResult<bool>> disconnectBankAccount(String accountId) async {
     await Future.delayed(const Duration(milliseconds: 800));
     _accounts.removeWhere((element) => element.id == accountId);
-    return const ApiResult.success(true);
+    return ApiResult.success(true);
   }
 }
