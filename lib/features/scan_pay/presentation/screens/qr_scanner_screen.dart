@@ -76,17 +76,33 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(
-                        _isFlashOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
-                        color: _isFlashOn ? AppColors.primary : Colors.white,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isFlashOn = !_isFlashOn;
-                        });
-                      },
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            _isFlashOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+                            color: _isFlashOn ? AppColors.primary : Colors.white,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isFlashOn = !_isFlashOn;
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.flip_camera_android_rounded, color: Colors.white, size: 24),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Switched to front camera feed'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),

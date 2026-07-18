@@ -116,17 +116,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 icon: Icons.help_outline_rounded,
                 title: 'Help Center',
                 subtitle: 'FAQs and customer support chat',
-                onTap: () {},
+                onTap: () => context.pushNamed(RouteNames.support),
               ),
               _buildSettingTile(
                 icon: Icons.description_outlined,
                 title: 'Terms of Service',
-                onTap: () {},
+                onTap: () => context.pushNamed(RouteNames.termsOfService),
               ),
               _buildSettingTile(
                 icon: Icons.privacy_tip_outlined,
                 title: 'Privacy Policy',
-                onTap: () {},
+                onTap: () => context.pushNamed(RouteNames.privacyPolicy),
               ),
 
               const SizedBox(height: AppSpacing.xxl),

@@ -257,6 +257,7 @@ class MainShell extends ConsumerWidget {
               label: 'Help & Support',
               onTap: () {
                 Navigator.pop(context);
+                context.pushNamed(RouteNames.support);
               },
             ),
             const Spacer(),

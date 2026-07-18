@@ -87,6 +87,12 @@ abstract final class RouteNames {
   static const String languagePreference = 'language-preference';
   static const String timezonePreference = 'timezone-preference';
 
+  // ── Support / Info ─────────────────────────────────────────
+  static const String support = 'support';
+  static const String termsOfService = 'terms-of-service';
+  static const String privacyPolicy = 'privacy-policy';
+
   // ── PIN Auth ───────────────────────────────────────────────
   static const String pinAuth = 'pin-auth';
 }
+

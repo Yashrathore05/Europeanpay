@@ -117,12 +117,12 @@ class ProfileScreen extends ConsumerWidget {
             _MenuItem(
               'Help & Support',
               Icons.help_outline_rounded,
-              () {},
+              () => context.pushNamed(RouteNames.support),
             ),
             _MenuItem(
               'Privacy Policy',
               Icons.privacy_tip_outlined,
-              () {},
+              () => context.pushNamed(RouteNames.privacyPolicy),
             ),
             const SizedBox(height: AppSpacing.xl),
             Text(

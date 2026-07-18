@@ -46,6 +46,8 @@ import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/settings/presentation/screens/change_password_screen.dart';
 import '../../features/settings/presentation/screens/pin_setup_screen.dart';
 import '../../features/settings/presentation/screens/two_factor_setup_screen.dart';
+import '../../features/support/presentation/screens/support_screen.dart';
+import '../../features/support/presentation/screens/document_viewer_screen.dart';
 import '../../shared/widgets/layout/main_shell.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -355,5 +357,29 @@ final GoRouter appRouter = GoRouter(
       name: RouteNames.twoFactorSetup,
       builder: (context, state) => const TwoFactorSetupScreen(),
     ),
+
+    // ── Support & Legal ──────────────────────────────────────
+    GoRoute(
+      path: '/support',
+      name: RouteNames.support,
+      builder: (context, state) => const SupportScreen(),
+    ),
+    GoRoute(
+      path: '/terms-of-service',
+      name: RouteNames.termsOfService,
+      builder: (context, state) => const DocumentViewerScreen(
+        title: 'Terms of Service',
+        content: 'Welcome to EU Pay. These Terms of Service govern your use of our application, website, and simulated financial services. By accessing or using our services, you agree to be bound by these terms. We provide private payments, open banking connections via Powens, and a loyalty points rewards program. EU Pay reserves the right to modify or terminate features or update cashback streaks and tiers at any time. Check the rules and withdrawal eligibility criteria frequently to stay informed.',
+      ),
+    ),
+    GoRoute(
+      path: '/privacy-policy',
+      name: RouteNames.privacyPolicy,
+      builder: (context, state) => const DocumentViewerScreen(
+        title: 'Privacy Policy',
+        content: 'EU Pay is committed to protecting your privacy. This Privacy Policy describes how we collect, use, and disclose personal details, linked bank accounts, and transaction information. We process data to offer simulated open banking features, calculate loyalty points cashback, and verify recipient information. We use Powens to securely read bank credentials without directly storing them on our servers. All logins and sensitive actions are protected with 2FA, session timeout limits, and PIN confirmation.',
+      ),
+    ),
   ],
 );
+
